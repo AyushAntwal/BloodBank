@@ -1,5 +1,5 @@
 <form [formGroup]="bloodStockForm" (ngSubmit)="onSubmit()">
-  <div class="my-3" *ngFor="let bloodGroup of bloodStock">
+  <div *ngFor="let bloodGroup of bloodStock">
     <div class="container border p-1 bg-light rounded-2 m-auto w-50 d-flex">
       <label class="form-label text-center m-1 p-1 w-75">{{
         bloodGroup.group
@@ -7,11 +7,12 @@
       <input
         type="number"
         class="form-control w-25"
-        [formControlName]="bloodGroup.group"
+        [value]="bloodGroup.count"
+        (change)="handelChange($event, bloodGroup)"
       />
     </div>
   </div>
-  <div class="container d-flex justify-content-center ">
-    <button type="submit" class="btn m-auto btn-primary">Update Stock</button>
+  <div class="container d-flex justify-content-center">
+    <button type="submit" class="btn w-50 btn-primary">Update Stock</button>
   </div>
 </form>

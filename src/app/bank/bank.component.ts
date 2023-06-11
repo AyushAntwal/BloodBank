@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
-import { BloodStock } from '../BloodStock';
-import { FormControl, FormGroup } from '@angular/forms';
-import { group } from '@angular/animations';
+import { Component, OnInit } from '@angular/core';
+import { Blood, BloodStock } from '../BloodStock';
 interface Request {
   group: string;
   count: number;
@@ -14,19 +12,20 @@ interface DonateList {
   templateUrl: './bank.component.html',
   styleUrls: ['./bank.component.css'],
 })
-export class BankComponent {
-  items = [
-    { name: 'Item 1', count: 5 },
-    { name: 'Item 2', count: 3 },
-    { name: 'Item 3', count: 7 },
-  ];
-  bloodStock: any[];
+export class BankComponent implements OnInit {
+  bloodStock!: Blood[];
   bucket: any[] = [];
+  isDataLoaded = false;
   reqest: Request = { group: '', count: 0 };
 
-  constructor(public BloodStock: BloodStock) {
-    // console.log(BloodStock.count);
-    this.bloodStock = BloodStock.count;
+  constructor(public BloodStock: BloodStock) {}
+
+  ngOnInit(): void {
+    this.BloodStock.getData().subscribe((data) => {
+      // console.log(data);
+      this.bloodStock = data;
+      this.isDataLoaded = true;
+    });
   }
   donateList: DonateList = {
     'O-': [],
@@ -91,5 +90,8 @@ export class BankComponent {
     let count: number = 0;
     this.bucket.map((l) => (count += l.count));
     return count;
+  }
+  show(item: any) {
+    console.log(item);
   }
 }

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "blood-bank-f4e93": {
+      "hosting": {
+        "bloodStore": [
+          "blood-bank-f4e93"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "blood-bank-f4e93"
+  }
+}

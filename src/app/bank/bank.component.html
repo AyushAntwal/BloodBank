@@ -1,70 +1,93 @@
 <div class="container">
-  <div class="">
+  <div class="" *ngIf="isDataLoaded">
     <!-- Items List -->
-
+    <h3>Store</h3>
     <div
-      class="card"
+      class="row border p-3 mx-auto rounded-4 row-cols-2 m-3 row-cols-lg-4 g-2"
       cdkDropList
       #storeList="cdkDropList"
       [cdkDropListData]="bloodStock"
+      cdkDragLockAxis="y"
       [cdkDropListConnectedTo]="bucketList"
       (cdkDropListDropped)="onItemDropped($event)"
     >
-      <h3>Store</h3>
       <div
+        class="border rounded-2 bg-light text-center"
         *ngFor="let item of bloodStock"
         [cdkDragDisabled]="checkDragable(item.group)"
         cdkDrag
+        (cdkDragStarted)="show(item)"
       >
-        {{ item.group }} (Count: {{ item.count }})
+        <div
+          class="d-flex m-1"
+          [ngClass]="checkDragable(item.group) ? 'nonDragble' : 'dragable '"
+        >
+          <div class="w-75 bg-light-subtle">
+            {{ item.group }}
+          </div>
+          <div class="w-25">
+            {{ item.count }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <form class="container w-50">
+        <div class="mb-3">
+          <label for="bloodGroup" class="form-label">Blood Group</label>
+          <select
+            id="bloodGroup"
+            class="form-select"
+            formControlName="bloodGroup"
+            (change)="onBloodGroupChange($event)"
+          >
+            <option selected disabled>Select Blood Group</option>
+            <option value="O-">O-</option>
+            <option value="O+">O+</option>
+            <option value="A-">A-</option>
+            <option value="A+">A+</option>
+            <option value="B-">B-</option>
+            <option value="B+">B+</option>
+            <option value="AB-">AB-</option>
+            <option value="AB+">AB+</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="bloodRequired" class="form-label">Blood Required</label>
+          <input
+            type="number"
+            id="bloodRequired"
+            class="form-control"
+            placeholder="Enter required blood amount"
+            (change)="onBloodCountChange($event)"
+          />
+        </div>
+      </form>
+      <div
+        class="w-50 p-1 border mx-auto"
+        cdkDropList
+        #bucketList="cdkDropList"
+        [cdkDropListData]="bucket"
+        cdkDragLockAxis="y"
+        [cdkDropListConnectedTo]="storeList"
+        (cdkDropListDropped)="onBucketDropped($event)"
+      >
+        <h5 class="text-center font-monospace border-bottom">Bucket</h5>
+        <div
+          class="border rounded-2 bg-light dragable text-center d-flex"
+          *ngFor="let item of bucket"
+          cdkDrag
+        >
+          <div class="w-75 bg-light-subtle">
+            {{ item.group }}
+          </div>
+          <div class="w-25">
+            {{ item.count }}
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Bucket List -->
-    <div
-      class="card p-3"
-      cdkDropList
-      #bucketList="cdkDropList"
-      [cdkDropListData]="bucket"
-      [cdkDropListConnectedTo]="storeList"
-      (cdkDropListDropped)="onBucketDropped($event)"
-    >
-      <h3>Bucket</h3>
-      <div *ngFor="let item of bucket" cdkDrag>
-        {{ item.group }} (Count: {{ item.count }})
-      </div>
-    </div>
-    <!-- <input (keyup)="onKey($event)"> -->
-    <form>
-      <div class="mb-3">
-        <label for="bloodGroup" class="form-label">Blood Group</label>
-        <select
-          id="bloodGroup"
-          class="form-select"
-          formControlName="bloodGroup"
-          (change)="onBloodGroupChange($event)"
-        >
-          <option selected disabled>Select Blood Group</option>
-          <option value="O-">O-</option>
-          <option value="O+">O+</option>
-          <option value="A-">A-</option>
-          <option value="A+">A+</option>
-          <option value="B-">B-</option>
-          <option value="B+">B+</option>
-          <option value="AB-">AB-</option>
-          <option value="AB+">AB+</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="bloodRequired" class="form-label">Blood Required</label>
-        <input
-          type="number"
-          id="bloodRequired"
-          class="form-control"
-          placeholder="Enter required blood amount"
-          (change)="onBloodCountChange($event)"
-        />
-      </div>
-    </form>
   </div>
 </div>
