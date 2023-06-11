@@ -1,1 +1,17 @@
-<p>store works!</p>
+<form [formGroup]="bloodStockForm" (ngSubmit)="onSubmit()">
+  <div class="my-3" *ngFor="let bloodGroup of bloodStock">
+    <div class="container border p-1 bg-light rounded-2 m-auto w-50 d-flex">
+      <label class="form-label text-center m-1 p-1 w-75">{{
+        bloodGroup.group
+      }}</label>
+      <input
+        type="number"
+        class="form-control w-25"
+        [formControlName]="bloodGroup.group"
+      />
+    </div>
+  </div>
+  <div class="container d-flex justify-content-center ">
+    <button type="submit" class="btn m-auto btn-primary">Update Stock</button>
+  </div>
+</form>
