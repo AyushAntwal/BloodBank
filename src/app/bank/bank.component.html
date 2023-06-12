@@ -1,9 +1,9 @@
 <div class="container">
   <div class="" *ngIf="isDataLoaded">
     <!-- Items List -->
-    <h3>Store</h3>
+    <h3>Bank</h3>
     <div
-      class="row border p-3 mx-auto rounded-4 row-cols-2 m-3 row-cols-lg-4 g-2"
+      class="row border-dark border p-3 mx-auto rounded-4 row-cols-2 m-3 row-cols-lg-4 g-2"
       cdkDropList
       #storeList="cdkDropList"
       [cdkDropListData]="bloodStock"
@@ -12,17 +12,16 @@
       (cdkDropListDropped)="onItemDropped($event)"
     >
       <div
-        class="border rounded-2 bg-light text-center"
+        class="border rounded-2 shadow-sm bg-light text-center"
         *ngFor="let item of bloodStock"
         [cdkDragDisabled]="checkDragable(item.group)"
         cdkDrag
-        (cdkDragStarted)="show(item)"
       >
         <div
           class="d-flex m-1"
           [ngClass]="checkDragable(item.group) ? 'nonDragble' : 'dragable '"
         >
-          <div class="w-75 bg-light-subtle">
+          <div class="w-75 fw-bold bg-light-subtle">
             {{ item.group }}
           </div>
           <div class="w-25">
@@ -64,7 +63,7 @@
         </div>
       </form>
       <div
-        class="w-50 p-1 border mx-auto"
+        class="w-50 p-1 rounded-3 border-dark border mx-auto"
         cdkDropList
         #bucketList="cdkDropList"
         [cdkDropListData]="bucket"
@@ -72,13 +71,15 @@
         [cdkDropListConnectedTo]="storeList"
         (cdkDropListDropped)="onBucketDropped($event)"
       >
-        <h5 class="text-center font-monospace border-bottom">Bucket</h5>
+        <h5 class="text-center border-dark font-monospace border-bottom">
+          Bucket
+        </h5>
         <div
-          class="border rounded-2 bg-light dragable text-center d-flex"
+          class="border mt-2 rounded-2 shadow-sm bg-light dragable text-center d-flex"
           *ngFor="let item of bucket"
           cdkDrag
         >
-          <div class="w-75 bg-light-subtle">
+          <div class="w-75 fw-bold bg-light-subtle">
             {{ item.group }}
           </div>
           <div class="w-25">

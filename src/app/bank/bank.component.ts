@@ -14,7 +14,7 @@ interface DonateList {
 })
 export class BankComponent implements OnInit {
   bloodStock!: Blood[];
-  bucket: any[] = [];
+  bucket: Blood[] = [];
   isDataLoaded = false;
   reqest: Request = { group: '', count: 0 };
 
@@ -40,19 +40,18 @@ export class BankComponent implements OnInit {
   // Empty bucket initially
 
   onItemDropped(event: any) {
-    // console.log(
-    //   event.previousContainer.data,
-    //   event.container.data,
-    //   event.previousIndex,
-    //   event.currentIndex
-    // );
+    console.log(this.bucket[event.previousIndex].count);
+    let index = this.bloodStock.findIndex(
+      (value) => value.group === this.bucket[event.previousIndex].group
+    );
+    this.bloodStock[index].count += this.bucket[event.previousIndex].count;
     this.bucket = this.bucket.filter((l, i) => i !== event.previousIndex);
   }
 
   onBucketDropped(event: any) {
     if (event.previousContainer !== event.container) {
       // console.log(this.bloodStock[event.previousIndex].group);
-      console.log(this.bucketBloodCount(), this.reqest.count);
+      // console.log(this.bucketBloodCount(), this.reqest.count);
       if (this.bucketBloodCount() === this.reqest.count) {
         alert('Blood Requirement is Completed');
         return;
@@ -76,7 +75,11 @@ export class BankComponent implements OnInit {
     }
   }
   onBloodGroupChange(event: any) {
-    this.reqest.group = event.target.value;
+    if (!this.bucket.length) {
+      this.reqest.group = event.target.value;
+    } else {
+      alert('You have to Empty the bucket before changing the blood Group.');
+    }
   }
   onBloodCountChange(event: any) {
     this.reqest.count = Number(event.target.value);
@@ -95,3 +98,10 @@ export class BankComponent implements OnInit {
     console.log(item);
   }
 }
+
+// console.log(
+//   event.previousContainer.data,
+//   event.container.data,
+//   event.previousIndex,
+//   event.currentIndex
+// );

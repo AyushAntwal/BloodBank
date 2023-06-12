@@ -43,5 +43,6 @@ export class StoreComponent implements OnInit {
     }));
     console.log(value);
     this.BloodStock.uploadData(updateStock);
+    alert('Stock Updated');
   }
 }
