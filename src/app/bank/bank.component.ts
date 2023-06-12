@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Blood, BloodStock } from '../BloodStock';
+import { FormBuilder, FormGroup } from '@angular/forms';
 interface Request {
   group: string;
   count: number;
@@ -16,9 +17,16 @@ export class BankComponent implements OnInit {
   bloodStock!: Blood[];
   bucket: Blood[] = [];
   isDataLoaded = false;
+  showPurchaseDetails: Boolean = false;
+  bloodReqForm: FormGroup = new FormGroup({});
   reqest: Request = { group: '', count: 0 };
 
-  constructor(public BloodStock: BloodStock) {}
+  constructor(
+    public BloodStock: BloodStock,
+    private formmBuilder: FormBuilder
+  ) {
+    this.bloodReqForm = this.formmBuilder.group({});
+  }
 
   ngOnInit(): void {
     this.BloodStock.getData().subscribe((data) => {
@@ -46,14 +54,23 @@ export class BankComponent implements OnInit {
     );
     this.bloodStock[index].count += this.bucket[event.previousIndex].count;
     this.bucket = this.bucket.filter((l, i) => i !== event.previousIndex);
+    if (this.bucket.length) {
+      this.showPurchaseDetails = true;
+    } else {
+      this.showPurchaseDetails = false;
+    }
   }
 
   onBucketDropped(event: any) {
     if (event.previousContainer !== event.container) {
       // console.log(this.bloodStock[event.previousIndex].group);
       // console.log(this.bucketBloodCount(), this.reqest.count);
+      if (!this.reqest.count) {
+        alert('Please fill the blood Amount required.');
+        return;
+      }
       if (this.bucketBloodCount() === this.reqest.count) {
-        alert('Blood Requirement is Completed');
+        alert('Blood Requirement is Fullfilled..');
         return;
       }
       if (
@@ -73,7 +90,13 @@ export class BankComponent implements OnInit {
       }
       this.bloodStock[event.previousIndex].count -= 1;
     }
+    if (this.bucket.length) {
+      this.showPurchaseDetails = true;
+    } else {
+      this.showPurchaseDetails = false;
+    }
   }
+
   onBloodGroupChange(event: any) {
     if (!this.bucket.length) {
       this.reqest.group = event.target.value;
@@ -96,6 +119,17 @@ export class BankComponent implements OnInit {
   }
   show(item: any) {
     console.log(item);
+  }
+
+  onSubmit() {
+    this.BloodStock.uploadData(this.bloodStock);
+    // console.log(this.bucket);
+  }
+
+  updatePurchase() {
+    this.bucket = [];
+    this.bloodReqForm.reset(this.reqest);
+    this.reqest = { group: '', count: 0 };
   }
 }
 

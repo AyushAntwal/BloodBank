@@ -31,12 +31,17 @@
       </div>
     </div>
     <div class="d-flex">
-      <form class="container w-50">
+      <form
+        class="container w-50"
+        [formGroup]="bloodReqForm"
+        (ngSubmit)="onSubmit()"
+      >
         <div class="mb-3">
           <label for="bloodGroup" class="form-label">Blood Group</label>
           <select
             id="bloodGroup"
             class="form-select"
+            required
             formControlName="bloodGroup"
             (change)="onBloodGroupChange($event)"
           >
@@ -54,6 +59,7 @@
         <div class="mb-3">
           <label for="bloodRequired" class="form-label">Blood Required</label>
           <input
+            required
             type="number"
             id="bloodRequired"
             class="form-control"
@@ -61,6 +67,15 @@
             (change)="onBloodCountChange($event)"
           />
         </div>
+        <button
+          type="submit"
+          [disabled]="!showPurchaseDetails"
+          data-bs-toggle="modal"
+          data-bs-target="#purchaseModal"
+          class="btn btn-primary"
+        >
+          Purchase
+        </button>
       </form>
       <div
         class="w-50 p-1 rounded-3 border-dark border mx-auto"
@@ -88,7 +103,63 @@
         </div>
       </div>
     </div>
-
     <!-- Bucket List -->
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="purchaseModal"
+      tabindex="-1"
+      aria-labelledby="purchaseModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="purchaseModalLabel">Order List</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Blood Group</th>
+                  <th scope="col">Unit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of bucket; let i = index">
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ item.group }}</td>
+                  <td>{{ item.count }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              (click)="updatePurchase()"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
